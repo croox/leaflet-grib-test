@@ -1,0 +1,54 @@
+@import "~leaflet/dist/leaflet";
+@import "~leaflet.fullscreen/Control.FullScreen";
+
+
+
+.map-wrapper {
+    width: 100%;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-around;
+    // & > div {
+    //     display: block;
+    //     width: 100%;
+    // }
+}
+
+.fullscreen-icon {
+    background-image: url(../images/icon-fullscreen.png) !important;
+    background-size: auto;
+    background-position: center;
+}
+.leaflet-retina .fullscreen-icon {
+    background-image: url(../images/icon-fullscreen-2x.png) !important;
+    background-size: 26px 26px;
+}
+.leaflet {
+    &-container {
+        width: calc(100% + 0em);
+        height: 100%;
+    }
+    &-popup {
+        white-space: pre-wrap;
+    }
+    &-marker-icon {
+        /* &.location {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: solid 3.5px $saft-white;
+            border-radius: 50% !important;
+
+            background-color: $saft-yellow;
+            &.is-active {
+                background-color: $saft-green;
+            }
+            &.is-editing {
+                background-color: $saft-red;
+            }
+            &.disabled {
+                opacity: 0.5;
+            }
+        } */
+    }
+}
