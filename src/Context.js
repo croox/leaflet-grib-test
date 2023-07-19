@@ -2,4 +2,4 @@ import {
     createContext,
 } from "react";
 
-export const ContextBaseLayers = createContext( {} );
+export const ContextLayers = createContext( {} );
