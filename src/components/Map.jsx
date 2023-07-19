@@ -10,18 +10,18 @@ import {
 	TileLayer,
 	// Marker,
 	// Popup,
-	// useMap,
+	useMap,
 	// useMapEvents,
 	ZoomControl,
 	// FeatureGroup,
 } from 'react-leaflet'
 // import L from 'leaflet';
 
-// import {
-// 	useRef,
-// 	useEffect,
-//     useState,
-// } from 'react';
+import {
+	// useRef,
+	useEffect,
+  // useState,
+} from 'react';
 
 /**
  * Internal dependencies
@@ -31,6 +31,18 @@ import {
 } from '../constants';
 import FullscreenControl from './FullscreenControl.jsx';
 import useStyleMaxElementHeight from '../compose/useStyleMaxElementHeight';
+
+/**
+ * Invalidate map size on window height changes.
+ *
+ */
+const MapInvalidateSize = ( { style } ) => {
+  const map = useMap();
+  useEffect( () => {
+      map.invalidateSize();
+  }, [style.height] );
+  return null
+}
 
 const Map = () => {
 
@@ -48,6 +60,8 @@ const Map = () => {
                 closePopupOnClick={ false }
             >
                 <FullscreenControl position="topright" />
+
+                <MapInvalidateSize style={ style } />
 
                 <ZoomControl position="topright" />
 
