@@ -209,23 +209,30 @@ const SkinnyWmsLayers = () => {
 								acc.title = node.innerHTML;
 								break;
 							case 'Dimension':
-								acc.dimension = {
-									default: node.getAttribute( 'default' ),
-									values: node.innerHTML.split( ',' ),
-								};
+								acc.dimensions = [
+									...( acc.dimensions ? acc.dimensions : [] ),
+									{
+										default: node.getAttribute( 'default' ),
+										name: node.getAttribute( 'name' ),
+										values: node.innerHTML.split( ',' ),
+									},
+								];
 								break;
 							case 'Style':
-								acc.legends = Array.from( node.getElementsByTagName( 'LegendURL' ) ).map( lun => {
-									const or = lun.getElementsByTagName( 'OnlineResource' );
-									if ( or.length ) {
-										return {
-											width: lun.getAttribute( 'width' ),
-											height: lun.getAttribute( 'height' ),
-											link: or.item(0).getAttribute( 'xlink:href' ),
-										};
-									}
-									return false;
-								} ).filter( legend => !! legend );
+								acc.legends = [
+									...( acc.legends ? acc.legends : [] ),
+									Array.from( node.getElementsByTagName( 'LegendURL' ) ).map( lun => {
+										const or = lun.getElementsByTagName( 'OnlineResource' );
+										if ( or.length ) {
+											return {
+												width: lun.getAttribute( 'width' ),
+												height: lun.getAttribute( 'height' ),
+												link: or.item(0).getAttribute( 'xlink:href' ),
+											};
+										}
+										return false;
+									} ).filter( legend => !! legend ),
+								];
 								break;
 						}
 						return acc;
@@ -249,6 +256,9 @@ const SkinnyWmsLayers = () => {
 	}, [] );
 
 	useEffect( () => {
+
+		console.log( 'debug wmsLayers', wmsLayers ); // debug
+
 		[...wmsLayers].map( wmsLayer => {
 			const key = 'SkinnyWmsLayers' + '+' + wmsLayer.name;
 
@@ -261,8 +271,11 @@ const SkinnyWmsLayers = () => {
 					transparent: true,
 				};
 
-				if ( wmsLayer.dimension ) {
-					options.time = wmsLayer.dimension.default;
+				if ( wmsLayer.dimensions && Array.isArray( wmsLayer.dimensions ) ) {
+					const dimTime = wmsLayer.dimensions.find( dim => 'time' === dim.name )
+					if ( dimTime ) {
+						options.time = dimTime.default;
+					}
 				}
 
 				const layer = L.tileLayer.wms( url, options );
