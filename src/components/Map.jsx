@@ -4,7 +4,7 @@
 // import classnames from 'classnames';
 import {
 	MapContainer,
-	TileLayer,
+	// TileLayer,
 	// Marker,
 	// Popup,
 	useMap,
@@ -116,8 +116,10 @@ const ImageLayer = ( {
 	} = useContext( ContextLayers );
 	errorOverlayUrl = errorOverlayUrl ? errorOverlayUrl : 'https://cdn-icons-png.flaticon.com/512/110/110686.png';
 
+	const key = 'ImageLayer' + '+' + imageUrl;
+
 	useEffect( () => {
-		if ( ! layersForControl.overlay[imageUrl] ) {
+		if ( ! layersForControl.overlay[key] ) {
 			latLngBounds = Array.isArray( latLngBounds ) ? L.latLngBounds( latLngBounds ) : latLngBounds;
 			const layer = L.imageOverlay( imageUrl, latLngBounds, {
 				opacity: 0.8,
@@ -129,7 +131,36 @@ const ImageLayer = ( {
 				...layersForControl,
 				overlay: {
 					...layersForControl.overlay,
-					[imageUrl]: layer,
+					[key]: layer,
+				},
+			};
+			setLayersForControl( newLayersForControl );
+		}
+	}, [layersForControl] );
+
+	return null;
+};
+
+const WmsLayer = ( {
+	url,			// required
+	options,
+} ) => {
+	const {
+		layersForControl,
+		setLayersForControl,
+	} = useContext( ContextLayers );
+
+	const key = 'WmsLayer' + '+' + options.layers + '+' + url;
+
+	useEffect( () => {
+		if ( ! layersForControl.overlay[key] ) {
+			const layer = L.tileLayer.wms( url, options );
+			// Add new layer to layersForControl.overlay.
+			const newLayersForControl = {
+				...layersForControl,
+				overlay: {
+					...layersForControl.overlay,
+					[key]: layer,
 				},
 			};
 			setLayersForControl( newLayersForControl );
@@ -182,6 +213,40 @@ const Map = () => {
 						[70.5, 	62.5 ],
 					] }
 				/>
+
+				<WmsLayer
+					url={ 'http://ows.mundialis.de/services/service?' }
+					options={ {
+						layers: 'SRTM30-Colored-Hillshade',
+					} }
+				/>
+
+				{/* Unfortunately only old data available  */}
+				{/* <WmsLayer
+					url={ 'https://geoportal.dwd-cloud.de/wms/icon-eu/wms?' }
+					options={ {
+						layers: 'tp',
+						uppercase: true,
+						format: 'image/png',
+						version: '1.3.0',
+						tiled: true,
+						time: '2022-08-03T09:00:00.000Z',
+						transparent: true,
+					} }
+				/> */}
+
+				{/* Example for WmsLayer for our local skinnyWms tile server */}
+				{/* <WmsLayer
+					url={ 'http://localhost:5000/wms?' }
+					options={ {
+						layers: 'tp',
+						uppercase: false,
+						format: 'image/png',
+						version: '1.3.0',
+						time: '2023-07-19T17:15:00.000Z',
+						transparent: true,
+					} }
+				/> */}
 
 				<LayersControl/>
 
