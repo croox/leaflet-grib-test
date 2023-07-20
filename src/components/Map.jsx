@@ -170,6 +170,119 @@ const WmsLayer = ( {
 	return null;
 };
 
+/**
+ * Check whats the skinnyWms tile server providing at port 5000 and add layers for everything.
+ *
+ * https://github.com/croox/powderguide__powderguide-com_skinnywms
+ */
+const SkinnyWmsLayers = () => {
+	const {
+		layersForControl,
+		setLayersForControl,
+	} = useContext( ContextLayers );
+
+	const [wmsLayers,setWmsLayers] = useState( [] );
+
+	const url = 'http://localhost:5000/wms?';
+
+	useEffect( () => {
+		if ( ! wmsLayers.length ) {
+
+			fetch( [
+				url,
+				'request=GetCapabilities',
+				'service=WMS',
+				'version=1.3.0',
+			].join( '&' ) ).then( res => res.text() ).then( xmlStr => {
+				const parser = new DOMParser();
+				const doc = parser.parseFromString( xmlStr, 'application/xml' );
+				const layerNodes = doc.querySelectorAll( 'Layer' );
+				let newWmsLayers = [];
+				layerNodes.forEach( ( layerNode, currentIndex, listObj ) => {
+
+					const wmsLayer = Array.from( layerNode.children ).reduce( ( acc, node ) => {
+						switch( node.nodeName ) {
+							case 'Name':
+								acc.name = node.innerHTML;
+								break;
+							case 'Title':
+								acc.title = node.innerHTML;
+								break;
+							case 'Dimension':
+								acc.dimension = {
+									default: node.getAttribute( 'default' ),
+									values: node.innerHTML.split( ',' ),
+								};
+								break;
+							case 'Style':
+								acc.legends = Array.from( node.getElementsByTagName( 'LegendURL' ) ).map( lun => {
+									const or = lun.getElementsByTagName( 'OnlineResource' );
+									if ( or.length ) {
+										return {
+											width: lun.getAttribute( 'width' ),
+											height: lun.getAttribute( 'height' ),
+											link: or.item(0).getAttribute( 'xlink:href' ),
+										};
+									}
+									return false;
+								} ).filter( legend => !! legend );
+								break;
+						}
+						return acc;
+					}, {} );
+
+					if ( !! wmsLayer.name && ! [
+						// 'background',
+					].includes( wmsLayer.name ) ) {
+						newWmsLayers = [
+							...newWmsLayers,
+							wmsLayer,
+						];
+					}
+				} );
+				setWmsLayers( newWmsLayers );
+
+			} ).catch( err => {
+				console.log( 'debug err', err ); // debug
+			} );
+		}
+	}, [] );
+
+	useEffect( () => {
+		[...wmsLayers].map( wmsLayer => {
+			const key = 'SkinnyWmsLayers' + '+' + wmsLayer.name;
+
+			if ( ! layersForControl.overlay[key] ) {
+				let options = {
+					layers: wmsLayer.name,
+					uppercase: false,
+					format: 'image/png',
+					version: '1.3.0',
+					transparent: true,
+				};
+
+				if ( wmsLayer.dimension ) {
+					options.time = wmsLayer.dimension.default;
+				}
+
+				const layer = L.tileLayer.wms( url, options );
+				// Add new layer to layersForControl.overlay.
+				const newLayersForControl = {
+					...layersForControl,
+					overlay: {
+						...layersForControl.overlay,
+						[key]: layer,
+					},
+				};
+				setLayersForControl( newLayersForControl );
+			}
+		} );
+
+	}, [layersForControl,wmsLayers] );
+
+	return null;
+};
+
 const Map = () => {
 
 	const [layersForControl,setLayersForControl] = useState( {
@@ -247,6 +360,8 @@ const Map = () => {
 						transparent: true,
 					} }
 				/> */}
+
+				<SkinnyWmsLayers/>
 
 				<LayersControl/>
 
