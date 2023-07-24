@@ -335,8 +335,8 @@ const Map = () => {
 				<ImageLayer
 					imageUrl={ '/static/icon-d2_germany_regular-lat-lon_single-level_2023071000_048_2d_tot_prec.png' }
 					latLngBounds={ [
-						[29.5,	-23.5],
-						[70.5, 	62.5 ],
+						[49, 	5],
+						[43.5, 17],
 					] }
 				/>
 
