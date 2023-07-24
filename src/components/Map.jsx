@@ -256,39 +256,43 @@ const SkinnyWmsLayers = () => {
 	}, [] );
 
 	useEffect( () => {
-
-		console.log( 'debug wmsLayers', wmsLayers ); // debug
-
 		[...wmsLayers].map( wmsLayer => {
-			const key = 'SkinnyWmsLayers' + '+' + wmsLayer.name;
 
-			if ( ! layersForControl.overlay[key] ) {
-				let options = {
-					layers: wmsLayer.name,
-					uppercase: false,
-					format: 'image/png',
-					version: '1.3.0',
-					transparent: true,
-				};
+			if ( wmsLayer.dimensions && Array.isArray( wmsLayer.dimensions ) ) {
 
-				if ( wmsLayer.dimensions && Array.isArray( wmsLayer.dimensions ) ) {
-					const dimTime = wmsLayer.dimensions.find( dim => 'time' === dim.name )
-					if ( dimTime ) {
-						options.time = dimTime.default;
-					}
+				const dimTime = wmsLayer.dimensions.find( dim => 'time' === dim.name );
+				if ( dimTime.values && Array.isArray( dimTime.values ) ) {
+					[...dimTime.values].map( dimt => {
+
+						const key = 'SkinnyWmsLayers' + '+' + wmsLayer.name + '+' + dimt;
+
+						if ( ! layersForControl.overlay[key] ) {
+							let options = {
+								layers: wmsLayer.name,
+								uppercase: false,
+								format: 'image/png',
+								version: '1.3.0',
+								transparent: true,
+								opacity: 0.5,
+								time: dimt,
+							};
+
+							const layer = L.tileLayer.wms( url, options );
+							// Add new layer to layersForControl.overlay.
+							const newLayersForControl = {
+								...layersForControl,
+								overlay: {
+									...layersForControl.overlay,
+									[key]: layer,
+								},
+							};
+							setLayersForControl( newLayersForControl );
+						}
+
+					} );
 				}
-
-				const layer = L.tileLayer.wms( url, options );
-				// Add new layer to layersForControl.overlay.
-				const newLayersForControl = {
-					...layersForControl,
-					overlay: {
-						...layersForControl.overlay,
-						[key]: layer,
-					},
-				};
-				setLayersForControl( newLayersForControl );
 			}
+
 		} );
 
 	}, [layersForControl,wmsLayers] );
