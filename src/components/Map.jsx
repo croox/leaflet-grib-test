@@ -4,7 +4,7 @@
 // import classnames from 'classnames';
 import {
 	MapContainer,
-	// TileLayer,
+	TileLayer,
 	// Marker,
 	// Popup,
 	useMap,
@@ -45,6 +45,34 @@ const MapInvalidateSize = ( { style } ) => {
 	}, [style.height] );
 	return null
 }
+
+const Test = () => {
+	const {
+		layersForControl,
+		setLayersForControl,
+	} = useContext( ContextLayers );
+	useEffect( () => {
+		const key = 'gdaltiles'
+		if ( ! layersForControl.overlay[key] ) {
+			const layer = L.tileLayer( 'http://localhost:5000/tiles/20230710/nomask/icon-d2/tot_prec/048/{z}/{x}/{y}.png', {
+				opacity: 1,
+				maxZoom: 9999,
+				maxNativeZoom: 8,
+			} );
+			// Add new layer to layersForControl.overlay.
+			const newLayersForControl = {
+				...layersForControl,
+				overlay: {
+					...layersForControl.overlay,
+					[key]: layer,
+				},
+			};
+			setLayersForControl( newLayersForControl );
+		}
+	}, [layersForControl] );
+
+	return null;
+};
 
 const TileLayerProvider = ( {
 	providerVariant,	// required
@@ -256,6 +284,7 @@ const SkinnyWmsLayers = () => {
 	}, [] );
 
 	useEffect( () => {
+		console.log( 'debug wmsLayers', wmsLayers ); // debug
 		[...wmsLayers].map( wmsLayer => {
 
 			if ( wmsLayer.dimensions && Array.isArray( wmsLayer.dimensions ) ) {
@@ -351,6 +380,8 @@ const Map = () => {
 					} }
 				/>
 
+
+
 				{/* Unfortunately only old data available  */}
 				{/* <WmsLayer
 					url={ 'https://geoportal.dwd-cloud.de/wms/icon-eu/wms?' }
@@ -378,9 +409,11 @@ const Map = () => {
 					} }
 				/> */}
 
+				<Test/>
 				<SkinnyWmsLayers/>
 
 				<LayersControl/>
+
 
 			</ContextLayers.Provider>
 
