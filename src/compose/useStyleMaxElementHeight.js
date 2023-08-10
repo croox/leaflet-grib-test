@@ -22,7 +22,7 @@ const useStyleMaxElementHeight = () => {
         return () => window.removeEventListener( 'resize', updateSize );
     }, [] );
     return {
-        height: windowHeight,
+        height: windowHeight * ( 2 / 3 ),
     };
 };
 

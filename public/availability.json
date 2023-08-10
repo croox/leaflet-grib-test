@@ -1,0 +1,362 @@
+[
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "freshsnw",
+        "Var_name": "FRESHSNW",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow age [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "h_snow",
+        "Var_name": "nosnow_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "no snow mask [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "h_snow",
+        "Var_name": "sde",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow height [m]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "rho_snow",
+        "Var_name": "rsn",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow density [kg m$^{-3}$]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "snowlmt",
+        "Var_name": "SNOWLMT",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow fall limit [m]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "t_snow",
+        "Var_name": "tsnow",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow temperature [$^{\\circ}$C]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "000",
+        "variable": "vmax_10m",
+        "Var_name": "gust",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "maximum gust speed [m s$^{-1}$]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "aswdir_s",
+        "Var_name": "AccSolSfcR",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "Mean Sol. Rad. Flux Sfc. [W m$^{-2}$]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "aswdir_s",
+        "Var_name": "sunshine",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "sunshine [h]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "freshsnw",
+        "Var_name": "FRESHSNW",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow age [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "h_snow",
+        "Var_name": "nosnow_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "no snow mask [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "h_snow",
+        "Var_name": "sde",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow height [m]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "rho_snow",
+        "Var_name": "rsn",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow density [kg m$^{-3}$]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "snow_gsp",
+        "Var_name": "lssrwe",
+        "mask_str": "hsnowmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated snowfall [cm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "snow_gsp",
+        "Var_name": "lssrwe",
+        "mask_str": "nomask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated snowfall [cm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "snow_gsp",
+        "Var_name": "lssrwe",
+        "mask_str": "tmaxmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated snowfall [cm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "snow_gsp",
+        "Var_name": "lssrwe",
+        "mask_str": "tmaxmask_vmaxmask_hsnowmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated snowfall [cm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "snow_gsp",
+        "Var_name": "lssrwe",
+        "mask_str": "vmaxmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated snowfall [cm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "snowlmt",
+        "Var_name": "SNOWLMT",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow fall limit [m]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "t_snow",
+        "Var_name": "max_tsnow",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "maximum snow temperature [$^{\\circ}$C]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "t_snow",
+        "Var_name": "max_tsnow_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "max_t_snow > 0$^{\\circ}$C [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "t_snow",
+        "Var_name": "min_tsnow",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "minimum snow temperature [$^{\\circ}$C]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "tot_prec",
+        "Var_name": "tp",
+        "mask_str": "hsnowmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated precipitation [mm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "tot_prec",
+        "Var_name": "tp",
+        "mask_str": "nomask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated precipitation [mm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "tot_prec",
+        "Var_name": "tp",
+        "mask_str": "tmaxmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated precipitation [mm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "tot_prec",
+        "Var_name": "tp",
+        "mask_str": "tmaxmask_vmaxmask_hsnowmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated precipitation [mm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "tot_prec",
+        "Var_name": "tp",
+        "mask_str": "vmaxmask",
+        "Witch_DAY": "0",
+        "cbar_label": "accumulated precipitation [mm]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "vmax_10m",
+        "Var_name": "gust",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "maximum gust speed [m s$^{-1}$]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "024",
+        "variable": "vmax_10m",
+        "Var_name": "max_vmax_10m_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "max_vmax_10m_mask [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "h_snow",
+        "Var_name": "nosnow_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "no snow mask [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "h_snow",
+        "Var_name": "sde",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "snow height [m]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "t_snow",
+        "Var_name": "max_tsnow",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "maximum snow temperature [$^{\\circ}$C]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "t_snow",
+        "Var_name": "max_tsnow_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "max_t_snow > 0$^{\\circ}$C [-]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "t_snow",
+        "Var_name": "min_tsnow",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "minimum snow temperature [$^{\\circ}$C]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "vmax_10m",
+        "Var_name": "gust",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "maximum gust speed [m s$^{-1}$]"
+    },
+    {
+        "today": "20230809",
+        "model": "icon-d2",
+        "day": "048",
+        "variable": "vmax_10m",
+        "Var_name": "max_vmax_10m_mask",
+        "mask_str": "nomask",
+        "Witch_DAY": "-",
+        "cbar_label": "max_vmax_10m_mask [-]"
+    }
+]

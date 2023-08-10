@@ -33,6 +33,9 @@ import {
 import { ContextLayers } from '../Context';
 import FullscreenControl from './FullscreenControl.jsx';
 import useStyleMaxElementHeight from '../compose/useStyleMaxElementHeight';
+// import availability from '.../availability.json';
+
+// console.log( 'debug availability', availability ); // debug
 
 /**
  * Invalidate map size on window height changes.
@@ -196,6 +199,75 @@ const WmsLayer = ( {
 	}, [layersForControl] );
 
 	return null;
+};
+
+
+
+
+const TestLayers = () => {
+	// const {
+	// 	layersForControl,
+	// 	setLayersForControl,
+	// } = useContext( ContextLayers );
+
+	// const [layers,setLayers] = useState( [] );
+
+	// const url = './availability.json';
+
+	// useEffect( () => {
+	// 	if ( ! layers.length ) {
+	// 		fetch( url, {
+  	// 			// mode: "cors",
+	// 			// credentials: "include",
+	// 			// headers: {
+	// 			// 	"Authorization" : "Basic " + btoa( 'alice:secret' ),
+	// 			// 	'Content-Type': 'application/json',
+	// 			// }
+	// 		} ).then( res => res.text() ).then( plots => {
+
+
+
+	// 			// console.log( 'debug plots',  ); // debug
+
+
+	// 			const groups = {};
+
+	// 			[...JSON.parse( plots )].map( plot => {
+	// 				const groupKey = [
+	// 					plot.variable,
+	// 					plot.Var_name,
+	// 					plot.mask_str,
+	// 					plot.Witch_DAY,
+	// 				].join( '####' );
+
+	// 				// console.log( 'debug plot', plot ); // debug
+	// 				// console.log( 'debug groupKey', groupKey ); // debug
+
+	// 				if ( ! groups.hasOwnProperty( groupKey ) ) {
+	// 					groups[groupKey] = [plot];
+	// 				} else {
+	// 					groups[groupKey] = [
+	// 						...groups[groupKey],
+	// 						plot,
+	// 					];
+	// 				}
+	// 			} );
+
+
+	// 			console.log( 'debug groups', groups ); // debug
+
+
+
+
+
+	// 		} ).catch( err => {
+	// 			console.log( 'debug err', err ); // debug
+	// 		} );
+	// 	}
+	// }, [] );
+
+	return null;
+
 };
 
 /**
@@ -365,20 +437,20 @@ const Map = () => {
 					providerVariant={ layerKey }
 				/> ) }
 
-				<ImageLayer
+				{/* <ImageLayer
 					imageUrl={ '/static/icon-d2_germany_regular-lat-lon_single-level_2023071000_048_2d_tot_prec.png' }
 					latLngBounds={ [
 						[49, 	5],
 						[43.5, 17],
 					] }
-				/>
+				/> */}
 
-				<WmsLayer
+				{/* <WmsLayer
 					url={ 'http://ows.mundialis.de/services/service?' }
 					options={ {
 						layers: 'SRTM30-Colored-Hillshade',
 					} }
-				/>
+				/> */}
 
 
 
@@ -409,8 +481,9 @@ const Map = () => {
 					} }
 				/> */}
 
-				<Test/>
-				<SkinnyWmsLayers/>
+				<TestLayers/>
+
+				{/* <SkinnyWmsLayers/> */}
 
 				<LayersControl/>
 
