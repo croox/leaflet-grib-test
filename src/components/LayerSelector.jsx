@@ -4,13 +4,17 @@ import {
 } from 'react';
 import { variationsMap } from '../constants';
 
+
+
+const url = 'http://localhost:3000/tiles/availability.json';
+// const url = 'https://powderguide-tileserver.croox.com/tiles/availability.json';
+
 const LayerSelector = ( {
-    plotGroups,
-    availableVariations,
+    setSelectedPlot,
 } ) => {
-
+	const [plotGroups,setPlotGroups] = useState( [] );
+	const [availableVariations,setAvailableVariations] = useState( false );
     const [selectedVarName,setSelectedVarName] = useState( false )
-
     const [selectedVariation,setSelectedVariation] = useState( {
         witchDay: false,
         maskStr: false,
@@ -20,6 +24,53 @@ const LayerSelector = ( {
     } );
 
     const selectedPlotGroup = selectedVarName ? plotGroups.find( pg => pg.Var_name === selectedVarName ) : false;
+
+    useEffect( () => {
+		if ( ! plotGroups.length ) {
+			fetch( url ).then( res => res.text() ).then( plots => {
+				const newPlotGroupsObj = {};
+				let newVariations = {
+					witchDay: [],
+					maskStr: [],
+					model: [],
+					date: [],
+					day: [],
+				};
+				[...JSON.parse( plots )].map( plot => {
+					// console.log( 'debug plot', plot ); // debug
+					if ( ! newPlotGroupsObj.hasOwnProperty( plot.Var_name ) ) {
+						newPlotGroupsObj[plot.Var_name] = {
+							// ...plot,
+							Var_name: plot.Var_name,
+							variable: plot.variable,
+							cbar_label: plot.cbar_label,
+							layers: [plot],
+						};
+					} else {
+						newPlotGroupsObj[plot.Var_name] = {
+							...newPlotGroupsObj[plot.Var_name],
+							layers: [
+								...newPlotGroupsObj[plot.Var_name].layers,
+								plot,
+							],
+						}
+					}
+					[...variationsMap].map( ( {
+						plotKey,
+						variationkey,
+					} ) => {
+						if ( ! newVariations[variationkey].includes( plot[plotKey] ) ) {
+							newVariations[variationkey] = [...newVariations[variationkey],plot[plotKey]];
+						}
+					} );
+				} );
+				setPlotGroups( Object.values( newPlotGroupsObj ) );
+				setAvailableVariations( newVariations );
+			} ).catch( err => {
+				console.log( 'debug err', err ); // debug
+			} );
+		}
+	}, [] );
 
 	useEffect( () => {
         let newSelectedVariation = {...selectedVariation};
@@ -35,13 +86,13 @@ const LayerSelector = ( {
     }, [selectedPlotGroup] );
 
 	useEffect( () => {
-        const selectedPlot = selectedPlotGroup ? selectedPlotGroup.layers.find( l => Object.keys( selectedVariation ).reduce( ( acc, variationkey ) => {
+        const newSelectedPlot = selectedPlotGroup ? selectedPlotGroup.layers.find( l => Object.keys( selectedVariation ).reduce( ( acc, variationkey ) => {
             if ( acc ) {
                 return l[variationsMap.find( v => v.variationkey === variationkey).plotKey] === selectedVariation[variationkey] ? l : false;
             }
             return acc;
         }, true ) ) : false;
-        console.log( 'debug selectedPlot', selectedPlot ); // debug
+        setSelectedPlot( newSelectedPlot )
     }, [selectedPlotGroup, selectedVariation] );
 
     // console.log( 'debug selected', {
