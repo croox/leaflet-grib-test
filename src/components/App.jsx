@@ -6,23 +6,17 @@ import {
 } from 'react';
 
 import '../style/App.scss';
+import { variationsMap } from '../constants';
 import Map from './Map';
 import LayerSelector from './LayerSelector.jsx';
 
 const App = () => {
 
 	const [plotGroups,setPlotGroups] = useState( [] );
+	const [availableVariations,setAvailableVariations] = useState( false );
 
-	const [days,setDays] = useState( [] );
-
-	const [witchDays,setWitchDays] = useState( [] );
-	const [maskStrs,setMaskStrs] = useState( [] );
-	const [models,setModels] = useState( [] );
-	const [dates,setDates] = useState( [] );
-
-
-
-	const url = './availability.json';
+	const url = 'http://localhost:3000/tiles/availability.json';
+	// const url = 'https://powderguide-tileserver.croox.com/tiles/availability.json';
 
 	useEffect( () => {
 		if ( ! plotGroups.length ) {
@@ -34,81 +28,58 @@ const App = () => {
 				// 	'Content-Type': 'application/json',
 				// }
 			} ).then( res => res.text() ).then( plots => {
-
-				// console.log( 'debug plots', JSON.parse( plots ) ); // debug
-
 				const newPlotGroupsObj = {};
-				let newDays = [];
-				let newWitchDays = [];
-				let newMaskStrs = [];
-				let newModels = [];
-				let newDates = [];
-
+				let newVariations = {
+					witchDay: [],
+					maskStr: [],
+					model: [],
+					date: [],
+					day: [],
+				};
 				[...JSON.parse( plots )].map( plot => {
-					const groupKey = [
-						// plot.today,
-						// plot.model,
-						// plot.variable,
-						plot.Var_name,
-						// plot.cbar_label,
-					].join( '####' );
-					if ( ! newPlotGroupsObj.hasOwnProperty( groupKey ) ) {
-						newPlotGroupsObj[groupKey] = {
-							...plot,
+					// console.log( 'debug plot', plot ); // debug
+					if ( ! newPlotGroupsObj.hasOwnProperty( plot.Var_name ) ) {
+						newPlotGroupsObj[plot.Var_name] = {
+							// ...plot,
+							Var_name: plot.Var_name,
+							variable: plot.variable,
+							cbar_label: plot.cbar_label,
 							layers: [plot],
 						};
 					} else {
-						newPlotGroupsObj[groupKey] = {
-							...newPlotGroupsObj[groupKey],
+						newPlotGroupsObj[plot.Var_name] = {
+							...newPlotGroupsObj[plot.Var_name],
 							layers: [
-								...newPlotGroupsObj[groupKey].layers,
+								...newPlotGroupsObj[plot.Var_name].layers,
 								plot,
 							],
 						}
 					}
-
-					if ( ! newDays.includes( plot.day ) ) {
-						newDays = [...newDays,plot.day];
-					}
-					if ( ! newWitchDays.includes( plot.Witch_DAY ) ) {
-						newWitchDays = [...newWitchDays,plot.Witch_DAY];
-					}
-					if ( ! newMaskStrs.includes( plot.mask_str ) ) {
-						newMaskStrs = [...newMaskStrs,plot.mask_str];
-					}
-					if ( ! newModels.includes( plot.model ) ) {
-						newModels = [...newModels,plot.model];
-					}
-					if ( ! newDates.includes( plot.today ) ) {
-						newDates = [...newDates,plot.today];
-					}
-
+					[...variationsMap].map( ( {
+						plotKey,
+						variationkey,
+					} ) => {
+						if ( ! newVariations[variationkey].includes( plot[plotKey] ) ) {
+							newVariations[variationkey] = [...newVariations[variationkey],plot[plotKey]];
+						}
+					} );
 				} );
 				setPlotGroups( Object.values( newPlotGroupsObj ) );
-				setDays( newDays );
-				setWitchDays( newWitchDays );
-				setMaskStrs( newMaskStrs );
-				setModels( newModels );
-				setDates( newDates );
+				setAvailableVariations( newVariations );
 			} ).catch( err => {
 				console.log( 'debug err', err ); // debug
 			} );
 		}
 	}, [] );
 
-
 	return <div className="App">
 
 		<Map/>
 
-		<LayerSelector
+		{ plotGroups.length > 0 && availableVariations && <LayerSelector
 			plotGroups={ plotGroups }
-			days={ days }
-			witchDays={ witchDays }
-			maskStrs={ maskStrs }
-			models={ models }
-			dates={ dates }
-		/>
+			availableVariations={ availableVariations }
+		/> }
 
 	</div>;
 }

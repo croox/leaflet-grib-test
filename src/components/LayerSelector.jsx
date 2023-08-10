@@ -2,97 +2,52 @@ import {
 	useEffect,
   	useState,
 } from 'react';
-
-const shallowEqual = ( object1, object2 ) => {
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-
-    if ( keys1.length !== keys2.length ) {
-        return false;
-    }
-
-    for ( let key of keys1 ) {
-        if ( object1[key] !== object2[key] ) {
-            return false;
-        }
-    }
-
-    return true;
-}
+import { variationsMap } from '../constants';
 
 const LayerSelector = ( {
     plotGroups,
-    days,
-    witchDays,
-    maskStrs,
-    models,
-    dates,
+    availableVariations,
 } ) => {
 
-    const [selectedPlotGroup,setSelectedPlotGroup] = useState( false )
+    const [selectedVarName,setSelectedVarName] = useState( false )
 
-    const [selectedDate,setSelectedDate] = useState( false )
-    const [selectedModel,setSelectedModel] = useState( false )
-    const [selectedDay,setSelectedDay] = useState( false )
-    const [selectedMaskStr,setSelectedMaskStr] = useState( false )
-    const [selectedwitchDay,setSelectedwitchDay] = useState( false )
+    const [selectedVariation,setSelectedVariation] = useState( {
+        witchDay: false,
+        maskStr: false,
+        model: false,
+        date: false,
+        day: false,
+    } );
 
-    const variations = [
-        {
-            label: 'today',
-            vars: dates,
-            selectedVar: selectedDate,
-            lSelector: 'today',
-            callback: setSelectedDate,
-        },
-        {
-            label: 'model',
-            vars: models,
-            selectedVar: selectedModel,
-            lSelector: 'model',
-            callback: setSelectedModel,
-        },
-        {
-            label: 'days',
-            vars: days,
-            selectedVar: selectedDay,
-            lSelector: 'day',
-            callback: setSelectedDay,
-        },
-        {
-            label: 'mask_str',
-            vars: maskStrs,
-            selectedVar: selectedMaskStr,
-            lSelector: 'mask_str',
-            callback: setSelectedMaskStr,
-        },
-        {
-            label: 'witchDay',
-            vars: witchDays,
-            selectedVar: selectedwitchDay,
-            lSelector: 'Witch_DAY',
-            callback: setSelectedwitchDay,
-        },
-    ];
+    const selectedPlotGroup = selectedVarName ? plotGroups.find( pg => pg.Var_name === selectedVarName ) : false;
 
 	useEffect( () => {
-        [...variations].map( ( {
-            selectedVar,
-            lSelector,
-            callback,
+        let newSelectedVariation = {...selectedVariation};
+        [...variationsMap].map( ( {
+            plotKey,
+            variationkey,
         } ) => {
-            if ( selectedPlotGroup && ! selectedPlotGroup.layers.find( l => l[lSelector] === selectedVar ) ) {
-                callback( selectedPlotGroup.layers[0][lSelector] );
+            if ( selectedPlotGroup && ! selectedPlotGroup.layers.find( l => l[plotKey] === selectedVariation[variationkey] ) ) {
+                newSelectedVariation[variationkey] = selectedPlotGroup.layers[0][plotKey];
             }
         } );
+        setSelectedVariation( newSelectedVariation );
     }, [selectedPlotGroup] );
 
-	// console.log( 'debug plotGroups', plotGroups ); // debug
-	// console.log( 'debug days', days ); // debug
-	// console.log( 'debug witchDays', witchDays ); // debug
-	// console.log( 'debug maskStrs', maskStrs ); // debug
-	// console.log( 'debug models', models ); // debug
-	// console.log( 'debug dates', dates ); // debug
+	useEffect( () => {
+        const selectedPlot = selectedPlotGroup ? selectedPlotGroup.layers.find( l => Object.keys( selectedVariation ).reduce( ( acc, variationkey ) => {
+            if ( acc ) {
+                return l[variationsMap.find( v => v.variationkey === variationkey).plotKey] === selectedVariation[variationkey] ? l : false;
+            }
+            return acc;
+        }, true ) ) : false;
+        console.log( 'debug selectedPlot', selectedPlot ); // debug
+    }, [selectedPlotGroup, selectedVariation] );
+
+    // console.log( 'debug selected', {
+    //     Var_name: selectedVarName,
+    //     ...selectedVariation,
+    // } );
 
 	return <div className="layer-selector">
         <div className="layer-selector-list">
@@ -100,11 +55,10 @@ const LayerSelector = ( {
                 { [...plotGroups].map( ( plotGroup, pgidx ) => {
                     return <li
                         key={ pgidx }
-                        onClick={ () => setSelectedPlotGroup( plotGroup ) }
+                        onClick={ () => setSelectedVarName( plotGroup.Var_name ) }
                         className={ [
                             'btn',
-                            shallowEqual( plotGroup, selectedPlotGroup ) && 'active',
-
+                            plotGroup.Var_name === selectedVarName ? 'active' : '',
                         ].join( ' ' ) }
                     >
                         { [
@@ -116,7 +70,7 @@ const LayerSelector = ( {
         </div>
 
         <div className='layer-selector-detail'>
-            { selectedPlotGroup && selectedPlotGroup['layers'] && <>
+            { selectedPlotGroup && selectedPlotGroup.layers && <>
 
                 <h3 className={ 'property' } >{ selectedPlotGroup.cbar_label }</h3>
 
@@ -135,26 +89,23 @@ const LayerSelector = ( {
                     </div>
                 } ) }
 
-                { [...variations].map( ( {
-                    label,
-                    vars,
-                    selectedVar,
-                    lSelector,
-                    callback,
+                { [...variationsMap].map( ( {
+                    plotKey,
+                    variationkey,
                 } ) => {
-                    return <div className={ 'property' }>
-                        <span>{ label }:</span> <span>
+                    return <div key={ variationkey } className={ 'property' }>
+                        <span>{ plotKey }:</span> <span>
                             <ul>
-                                { [...vars].map( val => {
-                                    const disabled = ! selectedPlotGroup.layers.find( l => l[lSelector] === val );
+                                { [...availableVariations[variationkey]].map( val => {
+                                    const disabled = ! selectedPlotGroup.layers.find( l => l[plotKey] === val );
                                     return <li
                                         key={ val }
                                         className={ [
                                             'btn',
-                                            selectedVar && selectedVar === val && 'active',
+                                            selectedVariation[variationkey] && selectedVariation[variationkey] === val && 'active',
                                             disabled && 'disabled'
                                         ].join( ' ' ) }
-                                        onClick={ () => ! disabled && callback( val ) }
+                                        onClick={ () => ! disabled && setSelectedVariation( { ...selectedVariation, [variationkey]: val } ) }
                                     >
                                         { val }
                                     </li>
