@@ -4,7 +4,7 @@
 // import classnames from 'classnames';
 import {
 	MapContainer,
-	TileLayer,
+	// TileLayer,
 	// Marker,
 	// Popup,
 	useMap,
@@ -23,6 +23,8 @@ import {
 	useEffect,
   	useState,
 } from 'react';
+import { tileServerUrl } from './LayerSelector.jsx';
+
 
 /**
  * Internal dependencies
@@ -33,9 +35,6 @@ import {
 import { ContextLayers } from '../Context';
 import FullscreenControl from './FullscreenControl.jsx';
 import useStyleMaxElementHeight from '../compose/useStyleMaxElementHeight';
-// import availability from '.../availability.json';
-
-// console.log( 'debug availability', availability ); // debug
 
 /**
  * Invalidate map size on window height changes.
@@ -48,34 +47,6 @@ const MapInvalidateSize = ( { style } ) => {
 	}, [style.height] );
 	return null
 }
-
-const Test = () => {
-	const {
-		layersForControl,
-		setLayersForControl,
-	} = useContext( ContextLayers );
-	useEffect( () => {
-		const key = 'gdaltiles'
-		if ( ! layersForControl.overlay[key] ) {
-			const layer = L.tileLayer( 'http://localhost:5000/tiles/20230710/nomask/icon-d2/tot_prec/048/{z}/{x}/{y}.png', {
-				opacity: 1,
-				maxZoom: 9999,
-				maxNativeZoom: 8,
-			} );
-			// Add new layer to layersForControl.overlay.
-			const newLayersForControl = {
-				...layersForControl,
-				overlay: {
-					...layersForControl.overlay,
-					[key]: layer,
-				},
-			};
-			setLayersForControl( newLayersForControl );
-		}
-	}, [layersForControl] );
-
-	return null;
-};
 
 const TileLayerProvider = ( {
 	providerVariant,	// required
@@ -135,273 +106,34 @@ const LayersControl = () => {
 	return null;
 };
 
-const ImageLayer = ( {
-	imageUrl,		// required
-	latLngBounds,	// required
-	altText,
-	errorOverlayUrl,
+const PlotLayer = ( {
+	opacity,
+	selectedPlot,
 } ) => {
-	const {
-		layersForControl,
-		setLayersForControl,
-	} = useContext( ContextLayers );
-	errorOverlayUrl = errorOverlayUrl ? errorOverlayUrl : 'https://cdn-icons-png.flaticon.com/512/110/110686.png';
-
-	const key = 'ImageLayer' + '+' + imageUrl;
-
+	const map = useMap();
 	useEffect( () => {
-		if ( ! layersForControl.overlay[key] ) {
-			latLngBounds = Array.isArray( latLngBounds ) ? L.latLngBounds( latLngBounds ) : latLngBounds;
-			const layer = L.imageOverlay( imageUrl, latLngBounds, {
-				opacity: 0.8,
-				errorOverlayUrl: errorOverlayUrl,
-				alt: altText,
+		let layer;
+		if ( selectedPlot ) {
+			layer = L.tileLayer( tileServerUrl + selectedPlot.tile_url_path, {
+				opacity: opacity,
+				maxZoom: 9999,
+				maxNativeZoom: 8,
 			} );
-			// Add new layer to layersForControl.overlay.
-			const newLayersForControl = {
-				...layersForControl,
-				overlay: {
-					...layersForControl.overlay,
-					[key]: layer,
-				},
-			};
-			setLayersForControl( newLayersForControl );
+			layer.addTo( map )
 		}
-	}, [layersForControl] );
-
-	return null;
-};
-
-const WmsLayer = ( {
-	url,			// required
-	options,
-} ) => {
-	const {
-		layersForControl,
-		setLayersForControl,
-	} = useContext( ContextLayers );
-
-	const key = 'WmsLayer' + '+' + options.layers + '+' + url;
-
-	useEffect( () => {
-		if ( ! layersForControl.overlay[key] ) {
-			const layer = L.tileLayer.wms( url, options );
-			// Add new layer to layersForControl.overlay.
-			const newLayersForControl = {
-				...layersForControl,
-				overlay: {
-					...layersForControl.overlay,
-					[key]: layer,
-				},
-			};
-			setLayersForControl( newLayersForControl );
-		}
-	}, [layersForControl] );
-
-	return null;
-};
-
-
-
-
-const TestLayers = () => {
-	// const {
-	// 	layersForControl,
-	// 	setLayersForControl,
-	// } = useContext( ContextLayers );
-
-	// const [layers,setLayers] = useState( [] );
-
-	// const url = './availability.json';
-
-	// useEffect( () => {
-	// 	if ( ! layers.length ) {
-	// 		fetch( url, {
-  	// 			// mode: "cors",
-	// 			// credentials: "include",
-	// 			// headers: {
-	// 			// 	"Authorization" : "Basic " + btoa( 'alice:secret' ),
-	// 			// 	'Content-Type': 'application/json',
-	// 			// }
-	// 		} ).then( res => res.text() ).then( plots => {
-
-
-
-	// 			// console.log( 'debug plots',  ); // debug
-
-
-	// 			const groups = {};
-
-	// 			[...JSON.parse( plots )].map( plot => {
-	// 				const groupKey = [
-	// 					plot.variable,
-	// 					plot.Var_name,
-	// 					plot.mask_str,
-	// 					plot.Witch_DAY,
-	// 				].join( '####' );
-
-	// 				// console.log( 'debug plot', plot ); // debug
-	// 				// console.log( 'debug groupKey', groupKey ); // debug
-
-	// 				if ( ! groups.hasOwnProperty( groupKey ) ) {
-	// 					groups[groupKey] = [plot];
-	// 				} else {
-	// 					groups[groupKey] = [
-	// 						...groups[groupKey],
-	// 						plot,
-	// 					];
-	// 				}
-	// 			} );
-
-
-	// 			console.log( 'debug groups', groups ); // debug
-
-
-
-
-
-	// 		} ).catch( err => {
-	// 			console.log( 'debug err', err ); // debug
-	// 		} );
-	// 	}
-	// }, [] );
-
-	return null;
-
-};
-
-/**
- * Check whats the skinnyWms tile server providing at port 5000 and add layers for everything.
- *
- * https://github.com/croox/powderguide__powderguide-com_skinnywms
- */
-const SkinnyWmsLayers = () => {
-	const {
-		layersForControl,
-		setLayersForControl,
-	} = useContext( ContextLayers );
-
-	const [wmsLayers,setWmsLayers] = useState( [] );
-
-	const url = 'http://localhost:5000/wms?';
-
-	useEffect( () => {
-		if ( ! wmsLayers.length ) {
-
-			fetch( [
-				url,
-				'request=GetCapabilities',
-				'service=WMS',
-				'version=1.3.0',
-			].join( '&' ) ).then( res => res.text() ).then( xmlStr => {
-				const parser = new DOMParser();
-				const doc = parser.parseFromString( xmlStr, 'application/xml' );
-				const layerNodes = doc.querySelectorAll( 'Layer' );
-				let newWmsLayers = [];
-				layerNodes.forEach( ( layerNode, currentIndex, listObj ) => {
-
-					const wmsLayer = Array.from( layerNode.children ).reduce( ( acc, node ) => {
-						switch( node.nodeName ) {
-							case 'Name':
-								acc.name = node.innerHTML;
-								break;
-							case 'Title':
-								acc.title = node.innerHTML;
-								break;
-							case 'Dimension':
-								acc.dimensions = [
-									...( acc.dimensions ? acc.dimensions : [] ),
-									{
-										default: node.getAttribute( 'default' ),
-										name: node.getAttribute( 'name' ),
-										values: node.innerHTML.split( ',' ),
-									},
-								];
-								break;
-							case 'Style':
-								acc.legends = [
-									...( acc.legends ? acc.legends : [] ),
-									Array.from( node.getElementsByTagName( 'LegendURL' ) ).map( lun => {
-										const or = lun.getElementsByTagName( 'OnlineResource' );
-										if ( or.length ) {
-											return {
-												width: lun.getAttribute( 'width' ),
-												height: lun.getAttribute( 'height' ),
-												link: or.item(0).getAttribute( 'xlink:href' ),
-											};
-										}
-										return false;
-									} ).filter( legend => !! legend ),
-								];
-								break;
-						}
-						return acc;
-					}, {} );
-
-					if ( !! wmsLayer.name && ! [
-						// 'background',
-					].includes( wmsLayer.name ) ) {
-						newWmsLayers = [
-							...newWmsLayers,
-							wmsLayer,
-						];
-					}
-				} );
-				setWmsLayers( newWmsLayers );
-
-			} ).catch( err => {
-				console.log( 'debug err', err ); // debug
-			} );
-		}
-	}, [] );
-
-	useEffect( () => {
-		console.log( 'debug wmsLayers', wmsLayers ); // debug
-		[...wmsLayers].map( wmsLayer => {
-
-			if ( wmsLayer.dimensions && Array.isArray( wmsLayer.dimensions ) ) {
-
-				const dimTime = wmsLayer.dimensions.find( dim => 'time' === dim.name );
-				if ( dimTime.values && Array.isArray( dimTime.values ) ) {
-					[...dimTime.values].map( dimt => {
-
-						const key = 'SkinnyWmsLayers' + '+' + wmsLayer.name + '+' + dimt;
-
-						if ( ! layersForControl.overlay[key] ) {
-							let options = {
-								layers: wmsLayer.name,
-								uppercase: false,
-								format: 'image/png',
-								version: '1.3.0',
-								transparent: true,
-								opacity: 0.5,
-								time: dimt,
-							};
-
-							const layer = L.tileLayer.wms( url, options );
-							// Add new layer to layersForControl.overlay.
-							const newLayersForControl = {
-								...layersForControl,
-								overlay: {
-									...layersForControl.overlay,
-									[key]: layer,
-								},
-							};
-							setLayersForControl( newLayersForControl );
-						}
-
-					} );
-				}
+		return () => {
+			if ( layer ) {
+				map.removeControl( layer );
 			}
-
-		} );
-
-	}, [layersForControl,wmsLayers] );
-
+		};
+	}, [selectedPlot,opacity] );
 	return null;
 };
 
-const Map = () => {
+const Map = ( {
+	selectedPlot,
+	opacity,
+} ) => {
 
 	const [layersForControl,setLayersForControl] = useState( {
 		base: {},
@@ -437,56 +169,12 @@ const Map = () => {
 					providerVariant={ layerKey }
 				/> ) }
 
-				{/* <ImageLayer
-					imageUrl={ '/static/icon-d2_germany_regular-lat-lon_single-level_2023071000_048_2d_tot_prec.png' }
-					latLngBounds={ [
-						[49, 	5],
-						[43.5, 17],
-					] }
-				/> */}
-
-				{/* <WmsLayer
-					url={ 'http://ows.mundialis.de/services/service?' }
-					options={ {
-						layers: 'SRTM30-Colored-Hillshade',
-					} }
-				/> */}
-
-
-
-				{/* Unfortunately only old data available  */}
-				{/* <WmsLayer
-					url={ 'https://geoportal.dwd-cloud.de/wms/icon-eu/wms?' }
-					options={ {
-						layers: 'tp',
-						uppercase: true,
-						format: 'image/png',
-						version: '1.3.0',
-						tiled: true,
-						time: '2022-08-03T09:00:00.000Z',
-						transparent: true,
-					} }
-				/> */}
-
-				{/* Example for WmsLayer for our local skinnyWms tile server */}
-				{/* <WmsLayer
-					url={ 'http://localhost:5000/wms?' }
-					options={ {
-						layers: 'tp',
-						uppercase: false,
-						format: 'image/png',
-						version: '1.3.0',
-						time: '2023-07-19T17:15:00.000Z',
-						transparent: true,
-					} }
-				/> */}
-
-				<TestLayers/>
-
-				{/* <SkinnyWmsLayers/> */}
-
 				<LayersControl/>
 
+				<PlotLayer
+					opacity={ opacity }
+					selectedPlot={ selectedPlot }
+				/>
 
 			</ContextLayers.Provider>
 

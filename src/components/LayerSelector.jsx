@@ -4,10 +4,8 @@ import {
 } from 'react';
 import { variationsMap } from '../constants';
 
-
-
-const url = 'http://localhost:3000/tiles/availability.json';
-// const url = 'https://powderguide-tileserver.croox.com/tiles/availability.json';
+// export const url = 'http://localhost:3000/tiles/';
+export const tileServerUrl = 'https://powderguide-tileserver.croox.com/tiles/';
 
 const LayerSelector = ( {
     setSelectedPlot,
@@ -27,7 +25,7 @@ const LayerSelector = ( {
 
     useEffect( () => {
 		if ( ! plotGroups.length ) {
-			fetch( url ).then( res => res.text() ).then( plots => {
+			fetch( tileServerUrl + 'availability.json' ).then( res => res.text() ).then( plots => {
 				const newPlotGroupsObj = {};
 				let newVariations = {
 					witchDay: [],

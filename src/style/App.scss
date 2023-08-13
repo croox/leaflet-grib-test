@@ -137,8 +137,18 @@
     }
 }
 
-.tile_url_path {
+.tile_url_path,
+.opacity-control {
     min-height: 20px;
     padding: 2.25rem;
     padding-bottom: 0;
+}
+
+.opacity-control {
+    display: flex;
+    max-width: 800px;
+    align-items: center;
+    & > span {
+        margin-right: 1rem;
+    }
 }
