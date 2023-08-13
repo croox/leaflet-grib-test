@@ -117,6 +117,7 @@ const PlotLayer = ( {
 			layer = L.tileLayer( tileServerUrl + selectedPlot.tile_url_path, {
 				opacity: opacity,
 				maxZoom: 9999,
+				zIndex: 9999,
 				maxNativeZoom: 8,
 			} );
 			layer.addTo( map )
