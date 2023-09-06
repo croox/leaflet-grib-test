@@ -161,6 +161,7 @@ const Map = ( {
 			} }>
 
 				{ [
+					'Thunderforest.Outdoors',
 					'OpenStreetMap.Mapnik',
 					'Stamen.Watercolor',
 					'Esri.WorldImagery',
@@ -168,6 +169,10 @@ const Map = ( {
 				].reverse().map( layerKey => <TileLayerProvider
 					key={ layerKey }
 					providerVariant={ layerKey }
+					providerOptions={ 'Thunderforest.Outdoors' === layerKey ? {
+						className: 'grayscale',
+						apikey: 'db5ae1f5778a448ca662554581f283c5',
+					} : {} }
 				/> ) }
 
 				<LayersControl/>
