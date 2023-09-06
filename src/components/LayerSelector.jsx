@@ -4,8 +4,8 @@ import {
 } from 'react';
 import { variationsMap } from '../constants';
 
-// export const url = 'http://localhost:3000/tiles/';
-export const tileServerUrl = 'https://powderguide-tileserver.croox.com/tiles/';
+// export const tileServerUrl = 'http://localhost:3000/';
+export const tileServerUrl = 'https://powderguide-tileserver.croox.com/';
 
 const LayerSelector = ( {
     setSelectedPlot,
@@ -112,7 +112,7 @@ const LayerSelector = ( {
                     >
                         { [
                             plotGroup.cbar_label,
-                        ].map( ( str, sidx ) => <span key={ sidx }>{ str }</span> ) }
+                        ].map( ( html, sidx ) => <span key={ sidx } dangerouslySetInnerHTML={ { __html: html } } /> ) }
                     </li>
                 } ) }
             </ul>
@@ -121,7 +121,7 @@ const LayerSelector = ( {
         <div className='layer-selector-detail'>
             { selectedPlotGroup && selectedPlotGroup.layers && <>
 
-                <h3 className={ 'property' } >{ selectedPlotGroup.cbar_label }</h3>
+                <h3 className={ 'property' } dangerouslySetInnerHTML={ { __html: selectedPlotGroup.cbar_label } } />
 
                 { [
                     'Var_name',
