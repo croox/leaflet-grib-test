@@ -29,6 +29,10 @@ const App = () => {
 			{ selectedPlot ? tileServerUrl + selectedPlot.tile_url_path : '' }
 		</div>
 
+		<div className="legend">
+			{ selectedPlot && <img alt='legend' src={ tileServerUrl + selectedPlot.legend } /> }
+		</div>
+
 		<div className="opacity-control">
 			<span>opacity: </span>
 			<Slider

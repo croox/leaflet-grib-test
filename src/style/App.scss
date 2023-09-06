@@ -138,10 +138,18 @@
 }
 
 .tile_url_path,
+.legend,
 .opacity-control {
     min-height: 20px;
     padding: 2.25rem;
     padding-bottom: 0;
+}
+
+.legend {
+    height: 100px;
+    img {
+        height: 100%;
+    }
 }
 
 .opacity-control {
