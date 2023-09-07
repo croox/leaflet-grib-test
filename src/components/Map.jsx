@@ -109,6 +109,7 @@ const LayersControl = () => {
 const PlotLayer = ( {
 	opacity,
 	selectedPlot,
+	className,
 } ) => {
 	const map = useMap();
 	useEffect( () => {
@@ -119,6 +120,7 @@ const PlotLayer = ( {
 				maxZoom: 9999,
 				zIndex: 9999,
 				maxNativeZoom: 8,
+				className,
 			} );
 			layer.addTo( map )
 		}
@@ -180,6 +182,7 @@ const Map = ( {
 				<PlotLayer
 					opacity={ opacity }
 					selectedPlot={ selectedPlot }
+					className={ 'overlay-weather' }
 				/>
 
 			</ContextLayers.Provider>
